@@ -25,7 +25,12 @@ export default async function AdminDashboardPage() {
       prisma.article.findMany({ orderBy: { order: 'asc' } }),
     ])
 
+  const serializedMessages = messages.map(m => ({
+    ...m,
+    createdAt: m.createdAt.toISOString()
+  }))
+
   return (
-    <AdminDashboardClient initialData={{ profile, skills, services, projects, certificates, achievements, messages, experiences, patents, trainings, articles }} />
+    <AdminDashboardClient initialData={{ profile, skills, services, projects, certificates, achievements, messages: serializedMessages, experiences, patents, trainings, articles }} />
   )
 }
