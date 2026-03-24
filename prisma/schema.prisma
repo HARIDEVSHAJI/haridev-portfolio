@@ -1,0 +1,159 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Admin {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Profile {
+  id           String   @id @default(cuid())
+  tagline      String   @default("AI Engineer & Backend Developer")
+  bio          String   @default("I'm Haridev Shaji, a CS student at LPU specializing in AI & ML.")
+  github       String   @default("https://github.com/haridevshaji")
+  linkedin     String   @default("https://linkedin.com/in/haridevshaji")
+  twitter      String   @default("")
+  instagram    String   @default("")
+  email        String   @default("haridevshaji@gmail.com")
+  phone        String   @default("")
+  location     String   @default("Punjab, India")
+  cvUrl        String?
+  avatarUrl    String?
+  isAvailable  Boolean  @default(true)
+  typingTexts  String[] @default(["AI Engineer", "Backend Developer", "ML Enthusiast"])
+  currently    String   @default("3rd year B.Tech student at LPU specializing in AI & ML. Actively building projects in machine learning, backend systems, and exploring LLM applications.")
+  statYears    String   @default("2+")
+  statProjects String   @default("10+")
+  statSpec     String   @default("AI/ML")
+  statUni      String   @default("LPU")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Skill {
+  id        String   @id @default(cuid())
+  name      String
+  category  String   @default("Technical")
+  iconName  String   @default("code")
+  level     Int      @default(80)
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Service {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  iconName    String   @default("code")
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Project {
+  id          String   @id @default(cuid())
+  title       String
+  slug        String   @unique
+  description String
+  longDesc    String   @default("")
+  techStack   String[] @default([])
+  images      String[] @default([])
+  githubUrl   String?
+  liveUrl     String?
+  featured    Boolean  @default(false)
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Certificate {
+  id            String   @id @default(cuid())
+  title         String
+  issuer        String
+  issueDate     String
+  description   String   @default("")
+  imageUrl      String?
+  credentialUrl String?
+  order         Int      @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Achievement {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  iconName    String   @default("trophy")
+  date        String   @default("")
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Experience {
+  id          String   @id @default(cuid())
+  role        String
+  company     String
+  duration    String
+  description String
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Training {
+  id          String   @id @default(cuid())
+  title       String
+  provider    String
+  duration    String   @default("")
+  description String   @default("")
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Patent {
+  id          String   @id @default(cuid())
+  title       String
+  number      String   @default("")
+  description String   @default("")
+  filedDate   String   @default("")
+  status      String   @default("Published")
+  pdfUrl      String?
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Article {
+  id          String   @id @default(cuid())
+  title       String
+  description String   @default("")
+  url         String
+  platform    String   @default("")
+  publishedAt String   @default("")
+  imageUrl    String?
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Message {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  message   String
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
