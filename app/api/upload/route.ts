@@ -43,8 +43,23 @@ export async function POST(req: NextRequest) {
 
     if (supabaseUrl && supabaseKey) {
       const supabase = getSupabaseAdmin()
-      const storagePath = `${type}/${filename}`
 
+      // Delete old file if replacing avatar or cv
+      if (type === 'avatar' || type === 'cv') {
+        const { prisma } = await import('@/lib/prisma')
+        const profile = await prisma.profile.findFirst()
+        const oldUrl = type === 'avatar' ? profile?.avatarUrl : profile?.cvUrl
+        if (oldUrl && oldUrl.includes(STORAGE_BUCKET)) {
+          // Extract the storage path from the public URL
+          const marker = `/${STORAGE_BUCKET}/`
+          const oldPath = oldUrl.split(marker)[1]?.split('?')[0]
+          if (oldPath) {
+            await supabase.storage.from(STORAGE_BUCKET).remove([oldPath])
+          }
+        }
+      }
+
+      const storagePath = `${type}/${filename}`
       const { error } = await supabase.storage
         .from(STORAGE_BUCKET)
         .upload(storagePath, buffer, { contentType: file.type, upsert: true, cacheControl: '3600' })

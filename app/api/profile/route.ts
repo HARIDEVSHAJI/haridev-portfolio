@@ -20,11 +20,17 @@ export async function PUT(req: NextRequest) {
 
   try {
     const data = await req.json()
-    const profile = await prisma.profile.upsert({
-      where: { id: 'default-profile' },
-      update: data,
-      create: { id: 'default-profile', ...data },
-    })
+    // Find the existing profile (seeded with a cuid, not 'default-profile')
+    const existing = await prisma.profile.findFirst()
+    let profile
+    if (existing) {
+      profile = await prisma.profile.update({
+        where: { id: existing.id },
+        data,
+      })
+    } else {
+      profile = await prisma.profile.create({ data })
+    }
     return NextResponse.json(profile)
   } catch {
     return NextResponse.json({ error: 'Failed to update profile' }, { status: 500 })
